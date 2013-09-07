@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptors>
+
+	<object class="com.belerweb.maohuahua.model.User">
+		<property name="id" id="true" />
+		<property name="mobile" />
+		<property name="email" />
+		<property name="username" />
+		<property name="password" />
+		<property name="needChangePwd" />
+		<property name="mobileValid" />
+		<property name="emailValid" />
+		<property name="subDomain" />
+		<property name="fullname" />
+		<property name="nickname" />
+		<property name="avatar" />
+		<property name="source" />
+		<property name="lastLoginIP" />
+		<property name="roles" />
+		<property name="created" />
+		<property name="modified" />
+	</object>
+
+</descriptors>
