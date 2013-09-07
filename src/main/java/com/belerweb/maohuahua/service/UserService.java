@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,9 +33,15 @@ public class UserService implements UserDetailsService {
     user.setId(UUID.randomUUID().toString());
     if ("email".equals(with)) {
       user.setEmail(account);
+      user.setNickname(account.substring(0, account.indexOf("@")));
+      user.setAvatar(new Md5PasswordEncoder().encodePassword(account, null));
+      user.setSubDomain(user.getId());
     }
     if ("mobile".equals(with)) {
       user.setMobile(account);
+      user.setNickname(account);
+      user.setAvatar(null);
+      user.setSubDomain(account);
     }
     String password = RandomStringUtils.randomAlphanumeric(6);
     user.setPassword(new ShaPasswordEncoder(256).encodePassword(password, null));
