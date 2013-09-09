@@ -62,6 +62,8 @@ public class MongoDao implements com.googlecode.mjorm.MongoDao {
   private void initObjectMapper() throws IOException, XPathExpressionException,
       ClassNotFoundException, ParserConfigurationException, SAXException {
     mapper = new XmlDescriptorObjectMapper();
+    mapper.registerTypeConverter(new ByteArrayToBinary());
+    mapper.registerTypeConverter(new BinaryToByteArray());
     PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     Resource[] xmlResources = resolver.getResources("classpath:/mongo/**/*.xml");
     for (Resource resource : xmlResources) {
@@ -73,6 +75,10 @@ public class MongoDao implements com.googlecode.mjorm.MongoDao {
 
   public DaoQuery createQuery(String collection) {
     return daoImpl.createQuery().setCollection(collection);
+  }
+
+  public <T> T findById(String collection, Class<T> cls, String id) {
+    return createQuery(collection).eq("_id", id).findObject(cls);
   }
 
   @Override

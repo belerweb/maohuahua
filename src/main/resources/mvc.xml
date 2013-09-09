@@ -18,6 +18,7 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
 		</property>
 	</bean>
 	<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="writeAcceptCharset" value="false" />
 		<property name="supportedMediaTypes">
 			<list>
 				<value>text/plain; charset=UTF-8</value>

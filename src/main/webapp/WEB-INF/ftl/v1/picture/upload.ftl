@@ -1,3 +1,4 @@
+<#assign ContextPath=springMacroRequestContext.getContextPath() />
 <div id="page-content" class="clearfix">
 	<div class="page-header position-relative">
 		<h1>
@@ -66,6 +67,10 @@
 			runtimes:'html5,html4',
 			multi_selection:true,
 			filters:[{title : "图片", extensions : "jpg,gif,png"}],
+			url:'${ContextPath}/picture/upload',
+			multipart_params:{
+				date: $('#page-content .date-picker').datepicker('getDate').format('yyyyMMdd')
+			},
 			init:{
 				FilesAdded: function(up, files) {
 				},
@@ -83,7 +88,7 @@
 				UploadProgress: function(up, file) {
 				},
 				FileUploaded: function(up, file, info) {
-					files.push(file);
+					files.push($.parseJSON(info.response));
 				},
 				ChunkUploaded: function(up, file, info) {
 				},
@@ -92,7 +97,6 @@
 			}
 		});
 	};
-	uploaderInit();
 
 	$('#picture-upload-wizard').ace_wizard().on('change' , function(e, info){
 		if(info.step == 1) {
@@ -106,6 +110,7 @@
 				bootbox.alert('<div class="alert alert-error">亲，你选择了'+dateText+'，你未来人吗？。</div>');
 				return false;
 			}
+			uploaderInit();
 		}
 		if(info.step == 2) {
 			var uploader = $('#picture-uploader').pluploadQueue();
@@ -126,6 +131,14 @@
 				});
 				return false;
 			}
+			$.each(files, function(i, img) {
+				if(i%4==0) {
+					$('#picture-upload－step3').append('<div class="row-fluid"><ul class="thumbnails"></ul></div>');
+				}
+				var thumbnail = $('<li class="span3"><div class="thumbnail"></div></li>');
+				thumbnail.children().append('<img src="${ContextPath}/image/user/'+img.id+'.'+img.extension+'">');
+				$('#picture-upload－step3 .thumbnails:last').append(thumbnail);
+			});
 		}
 	}).on('changed', function(e) {
 	}).on('finished', function(e) {

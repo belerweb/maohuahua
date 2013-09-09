@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptors>
+
+	<object class="com.belerweb.maohuahua.model.UserImage">
+		<property name="id" id="true" />
+		<property name="name" />
+		<property name="extension" />
+		<property name="contentType" />
+		<property name="title" />
+		<property name="description" />
+		<property name="tags" />
+		<property name="data" storageClass="org.bson.types.Binary" />
+		<property name="size" />
+		<property name="userId" />
+		<property name="date" />
+		<property name="created" />
+		<property name="modified" />
+	</object>
+
+</descriptors>
