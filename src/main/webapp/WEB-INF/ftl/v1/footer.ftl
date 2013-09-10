@@ -3,6 +3,7 @@
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/jquery.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootbox.js"></script>
+		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap-editable.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap-datepicker.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap-datepicker.zh-CN.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/fuelux.wizard.js"></script>

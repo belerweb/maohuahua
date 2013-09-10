@@ -8,6 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link href="${ContextPath}/assets/v1/css/bootstrap.css" rel="stylesheet" />
 		<link href="${ContextPath}/assets/v1/css/datepicker.css" rel="stylesheet" />
+		<link href="${ContextPath}/assets/v1/css/bootstrap-editable.css" rel="stylesheet" />
 		<link href="${ContextPath}/assets/v1/css/jquery.plupload.queue.css" rel="stylesheet" />
 		<link href="${ContextPath}/assets/v1/css/font-awesome.css" rel="stylesheet" />
 

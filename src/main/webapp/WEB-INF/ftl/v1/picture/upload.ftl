@@ -50,6 +50,9 @@
 				<div id="picture-uploader"> </div>
 			</div>
 			<div class="step-pane" id="picture-upload－step3">
+				<div class="alert alert-info text-center">
+					<strong>图片上方的文字是图片名称，图片下方的文字是图片详细说明，点击一下就可以编辑修改。修改完成后自动保存。</strong>
+				</div>
 			</div>
 		</div>
 		<hr />
@@ -135,13 +138,34 @@
 				if(i%4==0) {
 					$('#picture-upload－step3').append('<div class="row-fluid"><ul class="thumbnails"></ul></div>');
 				}
-				var thumbnail = $('<li class="span3"><div class="thumbnail"></div></li>');
-				thumbnail.children().append('<img src="${ContextPath}/image/user/'+img.id+'.'+img.extension+'">');
-				$('#picture-upload－step3 .thumbnails:last').append(thumbnail);
+				var li = $('<li class="span3"><div class="thumbnail"></div></li>');
+				var thumbnail = li.find('.thumbnail');
+				var title = $('<h4></h4>');
+				title.text(img.title);
+				title.attr('data-pk', img.id);
+				title.attr('data-name', 'title');
+				title.attr('data-type', 'text');
+				thumbnail.append(title);
+				thumbnail.append('<img src="${ContextPath}/image/user/'+img.id+'.'+img.extension+'">');
+				var description = $('<p></p>');
+				description.attr('data-pk', img.id);
+				description.attr('data-name', 'description');
+				description.attr('data-type', 'textarea');
+				thumbnail.append(description);
+				$('#picture-upload－step3 .thumbnails:last').append(li);
+			});
+			$('h4,p', '#picture-upload－step3 .thumbnail').editable({
+				url:'${ContextPath}/picture/update',
+				emptytext:'未设置',
+				send:'always'
 			});
 		}
 	}).on('changed', function(e) {
 	}).on('finished', function(e) {
+		bootbox.alert('<div class="alert alert-success">成功上传'+files.length+'张图片。</div>', function(){
+			var date = $('#page-content .date-picker').datepicker('getDate');
+			App.go('#main-content', '${ContextPath}/picture?date=' + date.format('yyyy-MM-dd'));
+		});
 	});
 
 	$('#page-content .date-picker').mask("9999年99月99日").datepicker({
