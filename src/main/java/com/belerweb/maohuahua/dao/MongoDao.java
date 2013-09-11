@@ -2,6 +2,8 @@ package com.belerweb.maohuahua.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -23,6 +25,7 @@ import com.googlecode.mjorm.query.DaoQuery;
 import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBEncoder;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
@@ -79,6 +82,22 @@ public class MongoDao implements com.googlecode.mjorm.MongoDao {
 
   public <T> T findById(String collection, Class<T> cls, String id) {
     return createQuery(collection).eq("_id", id).findObject(cls);
+  }
+
+  public <T> DBObject unmap(T object) {
+    return mapper.unmap(object);
+  }
+
+  public <T> T map(DBObject dbObject, Class<T> cls) {
+    return mapper.map(dbObject, cls);
+  }
+
+  public <T> List<T> map(DBCursor dbCursor, Class<T> cls) {
+    List<T> result = new ArrayList<T>();
+    while (dbCursor.hasNext()) {
+      result.add(mapper.map(dbCursor.next(), cls));
+    }
+    return result;
   }
 
   @Override

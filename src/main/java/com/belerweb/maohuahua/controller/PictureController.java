@@ -105,7 +105,8 @@ public class PictureController extends ControllerHelper {
    */
   @RequestMapping("/picture")
   public Object picture(Model model) {
-    return "/v1/picture";
+    model.addAttribute("imgs", imageService.getUserImages(getUser().getId()));
+    return "/v1/picture/my";
   }
 
   /**
