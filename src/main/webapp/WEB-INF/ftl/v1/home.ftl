@@ -2,6 +2,15 @@
 <#assign Title='猫画画' />
 <#include "header_top.ftl">
 <#assign Menu=[{
+	'name':'我的网站',
+	'sub':[{
+		'name':'网站设置',
+		'url':'/site/settings'
+	},{
+		'name':'域名申请',
+		'url':'/site/domain'
+	}]
+},{
 	'name':'图片管理',
 	'sub':[{
 		'name':'上传图片',
