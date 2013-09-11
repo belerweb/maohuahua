@@ -27,6 +27,10 @@ public abstract class ControllerHelper extends ViewHelper {
     return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
   }
 
+  protected ResponseEntity<Object> illegal() {
+    return error("非法请求");
+  }
+
   protected ResponseEntity<Object> error(String message) {
     return new ResponseEntity<Object>(message, HttpStatus.BAD_REQUEST);
   }

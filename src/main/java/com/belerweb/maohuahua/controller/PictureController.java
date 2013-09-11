@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -107,6 +108,28 @@ public class PictureController extends ControllerHelper {
   public Object picture(Model model) {
     model.addAttribute("imgs", imageService.getUserImages(getUser().getId()));
     return "/v1/picture/my";
+  }
+
+  /**
+   * 更改图片信息
+   */
+  @RequestMapping(method = RequestMethod.POST, value = "/picture/update")
+  public Object update(@RequestParam String pk, @RequestParam String name,
+      @RequestParam String value) {
+    String userId = getUser().getId();
+    if ("title".equals(name)) {
+      if (StringUtils.isBlank(value)) {
+        return error("必须输入标题");
+      }
+
+      imageService.updateImage(userId, pk, name, value);
+      return ok();
+    }
+    if ("description".equals(name)) {
+      imageService.updateImage(userId, pk, name, value);
+      return ok();
+    }
+    return illegal();
   }
 
   /**

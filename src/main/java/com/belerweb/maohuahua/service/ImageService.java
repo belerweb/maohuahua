@@ -1,6 +1,7 @@
 package com.belerweb.maohuahua.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,10 @@ public class ImageService {
     }
     return result;
   }
+
+  public void updateImage(String userId, String imageId, String property, Object value) {
+    mongoDao.createQuery("UserImage").eq("userId", userId).eq("_id", imageId).modify()
+        .set(property, value).set("modified", new Date()).update();
+  }
+
 }

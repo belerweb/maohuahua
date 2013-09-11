@@ -16,10 +16,10 @@
 			</#if>
 			<li class="span3">
 				<div class="thumbnail">
-					<h4 date-pk="${img.id}" date-name="title" date-type="text">${img.title!?html}</h4>
+					<h4 data-pk="${img.id}" data-name="title" data-type="text">${img.title!?html}</h4>
 					<span class="label label-warning date">${img.date?string('yyyy-MM-dd')}</span>
 					<img src="${ContextPath}/image/user/${img.id}.${img.extension}">
-					<p date-pk="${img.id}" date-name="description" date-type="textarea">${img.description!?html}</p>
+					<p data-pk="${img.id}" data-name="description" data-type="textarea">${img.description!?html}</p>
 				</div>
 			</li>
 		</#list>
