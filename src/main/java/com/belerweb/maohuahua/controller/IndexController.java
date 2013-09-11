@@ -3,6 +3,8 @@ package com.belerweb.maohuahua.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.belerweb.maohuahua.model.User;
 import com.belerweb.maohuahua.service.EmailService;
+import com.belerweb.maohuahua.service.ImageService;
 import com.belerweb.maohuahua.service.SmsService;
 import com.belerweb.maohuahua.service.TemplateService;
 import com.belerweb.maohuahua.service.UserService;
@@ -28,9 +31,28 @@ public class IndexController extends ControllerHelper {
   private EmailService emailService;
   @Autowired
   private SmsService smsService;
+  @Autowired
+  private ImageService imageService;
 
-  @RequestMapping({"/", "/index.html", "/login.html"})
-  public Object index(Model model) {
+  @RequestMapping({"/", "/index.html"})
+  public Object index(HttpServletRequest request, Model model) {
+    String host = request.getServerName();
+    String subdomain = "";
+    if (host.length() > 14) {
+      subdomain = host.substring(0, host.length() - 14);
+    }
+
+    User user = userService.getUser("subDomain", subdomain);
+    if (user != null) {
+      model.addAttribute("imgs", imageService.getUserImages(user.getId()));
+      return "/v2/index";
+    }
+    System.out.println(subdomain);
+    return "/login";
+  }
+
+  @RequestMapping("/login.html")
+  public Object login(Model model) {
     return "/login";
   }
 
