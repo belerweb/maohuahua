@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.belerweb.maohuahua.model.ImageData;
 import com.belerweb.maohuahua.model.UserImage;
 import com.belerweb.maohuahua.service.ImageService;
 
@@ -63,7 +64,11 @@ public class PictureController extends ControllerHelper {
     }
 
     UserImage image = new UserImage();
-    image.setId(UUID.randomUUID().toString());
+    ImageData data = new ImageData();
+
+    String id = UUID.randomUUID().toString();
+    image.setId(id);
+    data.setId(id);
 
     try {
       name = new String(name.getBytes("ISO8859-1"));
@@ -78,13 +83,15 @@ public class PictureController extends ControllerHelper {
     image.setContentType(contentType);
     // image.setDescription(description);
     // image.setTags(tags);
+    image.setSize(file.getSize());
+
     try {
-      image.setData(file.getBytes());
+      data.setData(file.getBytes());
     } catch (IOException e) {
       e.printStackTrace();
       return error(e.getMessage());
     }
-    image.setSize(file.getSize());
+
     try {
       image.setDate(DateUtils.parseDate(date, new String[] {"yyyyMMdd"}));
     } catch (ParseException e) {
@@ -96,8 +103,7 @@ public class PictureController extends ControllerHelper {
     image.setCreated(current);
     image.setModified(current);
     image.setUserId(getUser().getId());
-    imageService.addUserImage(image);
-    image.setData(null);
+    imageService.addUserImage(image, data);
     return json(image);
   }
 
@@ -153,6 +159,7 @@ public class PictureController extends ControllerHelper {
     headers.setExpires(System.currentTimeMillis() + 31536000000L);
     headers.setCacheControl("max-age=31536000000");
     headers.setContentType(MediaType.valueOf(image.getContentType()));
-    return new ResponseEntity<byte[]>(image.getData(), headers, HttpStatus.OK);
+    ImageData data = imageService.getImageData(imageId);
+    return new ResponseEntity<byte[]>(data.getData(), headers, HttpStatus.OK);
   }
 }

@@ -17,7 +17,6 @@ public class UserImage {
   private String title;// 标题
   private String description;// 描述
   private List<String> tags = new ArrayList<>();
-  private byte[] data;
   private Long size;
   private String userId;// 用户
   private Date date;// 图片日期
@@ -78,14 +77,6 @@ public class UserImage {
 
   public void setTags(List<String> tags) {
     this.tags = tags;
-  }
-
-  public byte[] getData() {
-    return data;
-  }
-
-  public void setData(byte[] data) {
-    this.data = data;
   }
 
   public Long getSize() {

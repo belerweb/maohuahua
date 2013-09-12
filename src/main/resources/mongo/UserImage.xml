@@ -9,12 +9,16 @@
 		<property name="title" />
 		<property name="description" />
 		<property name="tags" />
-		<property name="data" storageClass="org.bson.types.Binary" />
 		<property name="size" />
 		<property name="userId" />
 		<property name="date" />
 		<property name="created" />
 		<property name="modified" />
+	</object>
+
+	<object class="com.belerweb.maohuahua.model.ImageData">
+		<property name="id" id="true" />
+		<property name="data" storageClass="org.bson.types.Binary" />
 	</object>
 
 </descriptors>
