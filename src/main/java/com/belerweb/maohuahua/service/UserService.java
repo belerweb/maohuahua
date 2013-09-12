@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.belerweb.maohuahua.dao.MongoDao;
+import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.User;
 
 @Service
@@ -48,7 +49,24 @@ public class UserService implements UserDetailsService {
     user.setNeedChangePwd(true);
     user = mongoDao.createObject("User", user);
     user.setPassword(password);
+
+    // 保存用户的网站配置
+    Site site = new Site();
+    site.setId(user.getId());
+    site.setName("猫画画");
+    site.setTitle(account + "的网站");
+    site.setDescription("猫画画，用心纪录你画画的每一天！");
+    site.setTemplate("v2");
+    mongoDao.createObject("Site", site);
     return user;
+  }
+
+  public Site getUserSite(String userId) {
+    return mongoDao.findById("Site", Site.class, userId);
+  }
+
+  public void updateUserSite(String userId, String property, Object value) {
+    mongoDao.createQuery("Site").eq("_id", userId).modify().set(property, value).update();
   }
 
   @Override

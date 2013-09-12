@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.User;
 import com.belerweb.maohuahua.service.EmailService;
 import com.belerweb.maohuahua.service.ImageService;
@@ -44,10 +45,12 @@ public class IndexController extends ControllerHelper {
 
     User user = userService.getUser("subDomain", subdomain);
     if (user != null) {
+      Site site = userService.getUserSite(user.getId());
+      model.addAttribute("site", site);
       model.addAttribute("imgs", imageService.getUserImages(user.getId()));
-      return "/v2/index";
+      return "/" + site.getTemplate() + "/index";
     }
-    System.out.println(subdomain);
+
     return "/login";
   }
 

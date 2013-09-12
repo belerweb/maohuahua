@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptors>
+
+	<object class="com.belerweb.maohuahua.model.Site">
+		<property name="id" id="true" />
+		<property name="name" />
+		<property name="title" />
+		<property name="description" />
+		<property name="keywords" />
+		<property name="template" />
+	</object>
+
+</descriptors>
