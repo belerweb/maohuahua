@@ -46,6 +46,7 @@ public class IndexController extends ControllerHelper {
     User user = userService.getUser("subDomain", subdomain);
     if (user != null) {
       Site site = userService.getUserSite(user.getId());
+      model.addAttribute("user", user);
       model.addAttribute("site", site);
       model.addAttribute("imgs", imageService.getUserImages(user.getId()));
       return "/" + site.getTemplate() + "/index";

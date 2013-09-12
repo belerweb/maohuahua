@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-<title>${site.title!猫画画}</title>
+<title>${site.title!'猫画画'}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="${site.description!?html}">
 <meta name="keywords" content="${(site.keywords![])?join('')}">
