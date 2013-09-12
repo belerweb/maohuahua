@@ -9,38 +9,47 @@
 			</small>
 		</h1>
 	</div>
-	<div class="row-fluid">
-		<form method="post" action="${ContextPath}/site/settings" class="form-horizontal">
+	<div class="row-fluid form-horizontal">
 			<div class="control-group">
 				<label class="control-label">网站名称:</label>
 				<div class="controls">
-					<input name="name" type="text" placeholder="网站名称" class="input-xlarge">
+					<a class="editable" data-name="name" data-type="text">${(site.name!'猫画画')?html}</a>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">网站标题:</label>
+				<div class="controls">
+					<a class="editable" data-name="title" data-type="text">${(site.title!'猫画画')?html}</a>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">网站描述:</label>
 				<div class="controls">
-					<textarea name="description" placeholder="网站描述" class="input-xlarge"></textarea>
+					<a class="editable" data-name="description" data-type="textarea">${(site.description!'猫画画，用心纪录你画画的每一天！')?html}</a>
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-info">
-					<i class="icon-ok bigger-110"></i> 确定
+				<button type="button" class="btn btn-info" data-action="toggle">
+					<i class="icon-edit bigger-110"></i> 修改
 				</button>
 			</div>
-		</form>
 	</div>
 </div>
 <script type="text/javascript">
-$('#page-content form').submit(function(){
-	$(this).ajaxSubmit({
-		success: function(response, status, xhr, form) {
-			bootbox.alert('<div class="alert alert-success">保存成功！</div>');
-		},
-		error: function(xhr, status, response, form) {
-			bootbox.alert('<div class="alert alert-error">保存失败！</div>');
-		}
-	});
-	return false;
+$('#page-content .editable').editable({
+	disabled : true,
+	emptytext : '还没有设置哦！',
+	send : 'always',
+	url : '${ContextPath}/site/settings'
+});
+$('#page-content button[data-action=toggle]').click(function(){
+	$('#page-content .editable').editable('toggleDisabled');
+	var clicked = $(this).data('clicked')||0;
+	if (clicked%2==0) {
+		$(this).removeClass('btn-info').addClass('btn-success').html('<i class="icon-ok bigger-110"></i> 完成');
+	} else {
+		$(this).removeClass('btn-success').addClass('btn-info').html('<i class="icon-edit bigger-110"></i> 修改');
+	}
+	$(this).data('clicked', clicked+1);
 });
 </script>

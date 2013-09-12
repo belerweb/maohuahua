@@ -31,10 +31,10 @@ public class SiteController extends ControllerHelper {
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/site/settings")
-  public Object settings(@RequestParam String property, @RequestParam String value) {
+  public Object settings(@RequestParam String name, @RequestParam String value) {
     User user = getUser();
-    if ("name".equals(property) || "title".equals(property) || "description".equals(property)) {
-      userService.updateUserSite(user.getId(), property, value);
+    if ("name".equals(name) || "title".equals(name) || "description".equals(name)) {
+      userService.updateUserSite(user.getId(), name, value);
       return ok();
     }
     return illegal();
