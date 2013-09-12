@@ -3,10 +3,12 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>猫画画</title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<title>${site.title!猫画画}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
+<meta name="description" content="${site.description!?html}">
+<meta name="keywords" content="${(site.keywords![])?join('')}">
+<meta name="author" content="${user.nickname!'猫画画'}">
 <link href="${ContextPath}/assets/v2/css/bootstrap.css" rel="stylesheet">
 <link href="${ContextPath}/assets/v2/css/font-awesome.css" rel="stylesheet">
 <link href="${ContextPath}/assets/v2/css/application.css" rel="stylesheet">
@@ -26,7 +28,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			</button>
-			<a class="brand" href="${ContextPath}/">猫画画</a>
+			<a class="brand" href="${ContextPath}/">${site.name!'猫画画'}</a>
 			<div class="nav-collapse collapse">
 				<ul class="nav">
 					<li class="active"><a href="${ContextPath}/">首页</a></li>
