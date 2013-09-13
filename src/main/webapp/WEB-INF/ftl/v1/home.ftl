@@ -2,6 +2,9 @@
 <#assign Title='猫画画' />
 <#include "header_top.ftl">
 <#assign Menu=[{
+	'name':'个人设置',
+	'url':'/user/settings'
+},{
 	'name':'我的网站',
 	'sub':[{
 		'name':'网站设置',
