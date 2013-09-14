@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
       user.setEmail(account);
       user.setNickname(account.substring(0, account.indexOf("@")));
       user.setAvatar(new Md5PasswordEncoder().encodePassword(account, null));
-      user.setSubDomain(user.getId());
+      user.setSubDomain(account.replace("@", "."));
     }
     if ("mobile".equals(with)) {
       user.setMobile(account);
