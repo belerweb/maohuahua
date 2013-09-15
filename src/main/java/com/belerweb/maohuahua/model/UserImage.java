@@ -18,10 +18,16 @@ public class UserImage {
   private String description;// 描述
   private List<String> tags = new ArrayList<>();
   private Long size;
+  private Integer width;
+  private Integer height;
   private String userId;// 用户
   private Date date;// 图片日期
   private Date created;
   private Date modified;
+  private Boolean uploaded = Boolean.FALSE;
+
+  private String token;// 判断七牛回调是否合法
+  private String qiniuKey;// 七牛文件Key
 
   public String getId() {
     return id;
@@ -117,6 +123,46 @@ public class UserImage {
 
   public void setModified(Date modified) {
     this.modified = modified;
+  }
+
+  public Boolean getUploaded() {
+    return uploaded;
+  }
+
+  public void setUploaded(Boolean uploaded) {
+    this.uploaded = uploaded;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public String getQiniuKey() {
+    return qiniuKey;
+  }
+
+  public void setQiniuKey(String qiniuKey) {
+    this.qiniuKey = qiniuKey;
+  }
+
+  public Integer getWidth() {
+    return width;
+  }
+
+  public void setWidth(Integer width) {
+    this.width = width;
+  }
+
+  public Integer getHeight() {
+    return height;
+  }
+
+  public void setHeight(Integer height) {
+    this.height = height;
   }
 
 }

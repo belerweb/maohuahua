@@ -1,40 +1,36 @@
 package com.belerweb.maohuahua.controller;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.belerweb.maohuahua.model.ImageData;
 import com.belerweb.maohuahua.model.UserImage;
 import com.belerweb.maohuahua.service.ImageService;
+import com.qiniu.api.auth.digest.Mac;
+import com.qiniu.api.rs.PutPolicy;
 
 @Controller
 public class PictureController extends ControllerHelper {
 
-  private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(new String[] {"jpg", "png",
-      "gif"});
-  private static final List<String> ALLOWED_CONTENT_TYPE = Arrays.asList(new String[] {
-      "image/jpeg", "image/png", "image/gif"});
+  static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(new String[] {"jpg", "png", "gif"});
+  static final List<String> ALLOWED_CONTENT_TYPE = Arrays.asList(new String[] {"image/jpeg",
+      "image/png", "image/gif"});
 
   @Autowired
   private ImageService imageService;
@@ -48,62 +44,83 @@ public class PictureController extends ControllerHelper {
   }
 
   /**
-   * 上传图片
+   * 上传图片的Token
    */
-  @RequestMapping(method = RequestMethod.POST, value = "/picture/upload")
-  public Object upload(@RequestParam String date, @RequestParam MultipartFile file) {
-    String name = file.getOriginalFilename();
-    String extension = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
-    if (!ALLOWED_EXTENSIONS.contains(extension)) {
-      return error("只支持 jpg/png/gif 文件。");
-    }
-
-    String contentType = file.getContentType().toLowerCase();
-    if (!ALLOWED_CONTENT_TYPE.contains(contentType)) {
-      return error("不支持的文件。");
-    }
-
-    UserImage image = new UserImage();
-    ImageData data = new ImageData();
-
-    String id = UUID.randomUUID().toString();
-    image.setId(id);
-    data.setId(id);
-
+  @RequestMapping("/picture/upload/token")
+  public Object upload(@RequestParam String date, @RequestParam String name) {
+    Date _date = null;
     try {
-      name = new String(name.getBytes("ISO8859-1"));
-      image.setName(name);
-      image.setTitle(name);
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-      return error(e.getMessage());
-    }
-
-    image.setExtension(extension);
-    image.setContentType(contentType);
-    // image.setDescription(description);
-    // image.setTags(tags);
-    image.setSize(file.getSize());
-
-    try {
-      data.setData(file.getBytes());
-    } catch (IOException e) {
-      e.printStackTrace();
-      return error(e.getMessage());
-    }
-
-    try {
-      image.setDate(DateUtils.parseDate(date, new String[] {"yyyyMMdd"}));
+      _date = DateUtils.parseDate(date, new String[] {"yyyyMMdd"});
     } catch (ParseException e) {
       e.printStackTrace();
       return error(e.getMessage());
     }
+    String accessKey = "b3nVr3XS7U25Ak3tQ_gfzBecO1zCcafbS2H_RLgj";
+    String secretKey = "_K7ED3e5RzchZQzCIQnZoL8G7-xixOKsDZkRkMgg";
+    Mac mac = new Mac(accessKey, secretKey);
+    String userId = getUser().getId();
+    String imageId = UUID.randomUUID().toString();
+    String extension = name.substring(name.lastIndexOf(".")).toLowerCase();
+    String key = "u/" + userId + "/p/" + date + "/" + imageId + extension;
+    PutPolicy putPolicy = new PutPolicy("maohuahua:" + key);
+    putPolicy.endUser = userId;
+    putPolicy.callbackUrl = "http://maohuahua.com/qiniu/callback";
+    putPolicy.callbackBody =
+        "token=$(x:token)&uid=$(x:uid)&imageId=$(x:id)" + "&etag=$(etag)&fname=$(fname)"
+            + "&fsize=$(fsize)&mimeType=$(mimeType)" + "&imageInfo=$(imageInfo)&exif=$(exif)"
+            + "&width=$(imageInfo.width)&height=$(imageInfo.height)";
+    try {
+      String token = putPolicy.token(mac);
+      Map<String, String> result = new HashMap<>();
+      result.put("key", key);
+      result.put("token", token);
+      result.put("x:id", imageId);
+      result.put("x:uid", userId);
+      String imageToken = RandomStringUtils.randomAlphanumeric(16);
+      result.put("x:token", imageToken);
 
-    Date current = new Date();
-    image.setCreated(current);
-    image.setModified(current);
-    image.setUserId(getUser().getId());
-    imageService.addUserImage(image, data);
+      UserImage image = new UserImage();
+      image.setId(imageId);
+      image.setName(name);
+      image.setTitle(name);
+
+      image.setExtension(extension.substring(1));
+      image.setDate(_date);
+      Date current = new Date();
+      image.setCreated(current);
+      image.setModified(current);
+      image.setUserId(userId);
+      image.setToken(imageToken);
+      image.setQiniuKey(key);
+      imageService.addUserImage(image);
+
+      return json(result);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return error(e.getMessage());
+    }
+  }
+
+  /**
+   * 七牛上传图片回调
+   */
+  @RequestMapping(method = RequestMethod.POST, value = "/qiniu/callback")
+  public Object upload(@RequestParam String token, @RequestParam String uid,
+      @RequestParam String imageId, @RequestParam String etag, @RequestParam String fname,
+      @RequestParam long fsize, @RequestParam String mimeType, @RequestParam String imageInfo,
+      @RequestParam int width, @RequestParam int height, @RequestParam String exif,
+      HttpServletRequest request) {
+    UserImage image = imageService.getUserImage(imageId);
+    if (!token.equals(image.getToken())) {
+      return illegal();
+    }
+
+    image.setUploaded(Boolean.TRUE);
+    image.setSize(fsize);
+    image.setContentType(mimeType);
+    image.setWidth(width);
+    image.setHeight(height);
+    imageService.updateImage(image);
     return json(image);
   }
 
@@ -138,28 +155,4 @@ public class PictureController extends ControllerHelper {
     return illegal();
   }
 
-  /**
-   * 查看图片
-   */
-  @RequestMapping(value = "/image/user/{imageId}.{extention:jpg|png|gif}", method = RequestMethod.GET)
-  public Object image(@PathVariable String imageId, @PathVariable String extention,
-      @RequestHeader(value = "If-Modified-Since", required = false) String ifModifiedSince) {
-    if (ifModifiedSince != null) {
-      return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
-
-    UserImage image = imageService.getUserImage(imageId);
-    if (!extention.equals(image.getExtension())) {
-      return new ResponseEntity<byte[]>(null, null, HttpStatus.NOT_FOUND);
-    }
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setDate(System.currentTimeMillis());
-    headers.setLastModified(image.getModified().getTime());
-    headers.setExpires(System.currentTimeMillis() + 31536000000L);
-    headers.setCacheControl("max-age=31536000000");
-    headers.setContentType(MediaType.valueOf(image.getContentType()));
-    ImageData data = imageService.getImageData(imageId);
-    return new ResponseEntity<byte[]>(data.getData(), headers, HttpStatus.OK);
-  }
 }

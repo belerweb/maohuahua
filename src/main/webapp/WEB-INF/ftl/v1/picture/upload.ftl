@@ -70,9 +70,27 @@
 			runtimes:'html5,html4',
 			multi_selection:true,
 			filters:[{title : "图片", extensions : "jpg,gif,png"}],
-			url:'${ContextPath}/picture/upload',
-			multipart_params:{
-				date: $('#page-content .date-picker').datepicker('getDate').format('yyyyMMdd')
+			url:'http://up.qiniu.com/',
+			preinit:{
+				Init: function(up, info) {
+				},
+				UploadFile: function(up, file) {
+					var param;
+					$.ajax({
+						async:false,
+						url:'${ContextPath}/picture/upload/token',
+						data:{
+							date: $('#page-content .date-picker').datepicker('getDate').format('yyyyMMdd'),
+							name: file.name
+						}
+					}).done(function(data, status, xhr){
+						param = data;
+					}).fail(function(xhr, status, data){
+						bootbox.alert('<div class="alert alert-error">' + data + '</div>');
+						throw data;
+					});
+					up.settings.multipart_params = param;
+				}
 			},
 			init:{
 				FilesAdded: function(up, files) {
@@ -146,7 +164,7 @@
 				title.attr('data-name', 'title');
 				title.attr('data-type', 'text');
 				thumbnail.append(title);
-				thumbnail.append('<img src="${ContextPath}/image/user/'+img.id+'.'+img.extension+'">');
+				thumbnail.append('<img src="http://maohuahua.u.qiniudn.com/'+img.qiniuKey+'">');
 				var description = $('<p></p>');
 				description.attr('data-pk', img.id);
 				description.attr('data-name', 'description');

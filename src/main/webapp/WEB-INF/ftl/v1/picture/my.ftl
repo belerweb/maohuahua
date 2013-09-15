@@ -18,7 +18,7 @@
 				<div class="thumbnail">
 					<h4 data-pk="${img.id}" data-name="title" data-type="text">${img.title!?html}</h4>
 					<span class="label label-warning date">${img.date?string('yyyy-MM-dd')}</span>
-					<img src="${ContextPath}/image/user/${img.id}.${img.extension}">
+					<img src="http://maohuahua.u.qiniudn.com/${img.qiniuKey}">
 					<p data-pk="${img.id}" data-name="description" data-type="textarea">${img.description!?html}</p>
 				</div>
 			</li>

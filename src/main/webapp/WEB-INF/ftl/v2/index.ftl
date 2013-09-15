@@ -43,7 +43,7 @@
 	<#list imgs as img>
 		<div class="boxportfolio4">
 			<div class="boxcontainer">
-				<img src="${ContextPath}/image/user/${img.id}.${img.extension}" alt="${img.title!}">
+				<img src="http://maohuahua.u.qiniudn.com/${img.qiniuKey}" alt="${img.title!}">
 				<div class="roll">
 					<div class="wrapcaption">
 						<a href="singleproject.html"><i class="icon-link captionicons"></i></a>
