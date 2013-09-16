@@ -31,6 +31,8 @@ public class PictureController extends ControllerHelper {
   static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(new String[] {"jpg", "png", "gif"});
   static final List<String> ALLOWED_CONTENT_TYPE = Arrays.asList(new String[] {"image/jpeg",
       "image/png", "image/gif"});
+  static final String QINIU_AK = "qiniu.ak";
+  static final String QINIU_SK = "qiniu.sk";
 
   @Autowired
   private ImageService imageService;
@@ -55,8 +57,8 @@ public class PictureController extends ControllerHelper {
       e.printStackTrace();
       return error(e.getMessage());
     }
-    String accessKey = "b3nVr3XS7U25Ak3tQ_gfzBecO1zCcafbS2H_RLgj";
-    String secretKey = "_K7ED3e5RzchZQzCIQnZoL8G7-xixOKsDZkRkMgg";
+    String accessKey = System.getProperty(QINIU_AK, System.getenv(QINIU_AK));
+    String secretKey = System.getProperty(QINIU_SK, System.getenv(QINIU_SK));
     Mac mac = new Mac(accessKey, secretKey);
     String userId = getUser().getId();
     String imageId = UUID.randomUUID().toString();
