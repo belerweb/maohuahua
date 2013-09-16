@@ -66,7 +66,7 @@ public class PictureController extends ControllerHelper {
     String key = "u/" + userId + "/p/" + date + "/" + imageId + extension;
     PutPolicy putPolicy = new PutPolicy("maohuahua:" + key);
     putPolicy.endUser = userId;
-    putPolicy.callbackUrl = "http://maohuahua.com/qiniu/callback";
+    putPolicy.callbackUrl = "http://maohuahua.com/picture/upload";
     putPolicy.callbackBody =
         "token=$(x:token)&uid=$(x:uid)&imageId=$(x:id)" + "&etag=$(etag)&fname=$(fname)"
             + "&fsize=$(fsize)&mimeType=$(mimeType)" + "&imageInfo=$(imageInfo)&exif=$(exif)"
@@ -106,7 +106,7 @@ public class PictureController extends ControllerHelper {
   /**
    * 七牛上传图片回调
    */
-  @RequestMapping(method = RequestMethod.POST, value = "/qiniu/callback")
+  @RequestMapping(method = RequestMethod.POST, value = "/picture/upload")
   public Object upload(@RequestParam String token, @RequestParam String uid,
       @RequestParam String imageId, @RequestParam String etag, @RequestParam String fname,
       @RequestParam long fsize, @RequestParam String mimeType, @RequestParam String imageInfo,
