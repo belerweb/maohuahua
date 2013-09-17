@@ -2,7 +2,10 @@ package com.belerweb.maohuahua.controller;
 
 import java.lang.reflect.Method;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +13,24 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 
 import com.belerweb.maohuahua.model.User;
+import com.belerweb.maohuahua.service.UserService;
 import com.belerweb.maohuahua.view.ViewHelper;
 
 
 public abstract class ControllerHelper extends ViewHelper {
+
+  @Autowired
+  protected UserService userService;
+
+  protected User retrieveSiteOwner(HttpServletRequest request) {
+    String host = request.getServerName();
+    String subdomain = "";
+    if (host.length() > 14) {
+      subdomain = host.substring(0, host.length() - 14);
+    }
+
+    return userService.getUser("subDomain", subdomain);
+  }
 
   protected ResponseEntity<Object> ok() {
     return new ResponseEntity<Object>(HttpStatus.OK);

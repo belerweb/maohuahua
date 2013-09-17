@@ -19,13 +19,10 @@ import com.belerweb.maohuahua.service.EmailService;
 import com.belerweb.maohuahua.service.ImageService;
 import com.belerweb.maohuahua.service.SmsService;
 import com.belerweb.maohuahua.service.TemplateService;
-import com.belerweb.maohuahua.service.UserService;
 
 @Controller
 public class IndexController extends ControllerHelper {
 
-  @Autowired
-  private UserService userService;
   @Autowired
   private TemplateService templateService;
   @Autowired
@@ -37,17 +34,11 @@ public class IndexController extends ControllerHelper {
 
   @RequestMapping({"/", "/index.html"})
   public Object index(HttpServletRequest request, Model model) {
-    String host = request.getServerName();
-    String subdomain = "";
-    if (host.length() > 14) {
-      subdomain = host.substring(0, host.length() - 14);
-    }
-
-    User user = userService.getUser("subDomain", subdomain);
+    User user = retrieveSiteOwner(request);
     if (user != null) {
       Site site = userService.getUserSite(user.getId());
-      model.addAttribute("user", user);
       model.addAttribute("site", site);
+      model.addAttribute("owner", user);
       model.addAttribute("imgs", imageService.getUserImages(user.getId()));
       return "/" + site.getTemplate() + "/index";
     }

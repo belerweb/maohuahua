@@ -16,10 +16,12 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.belerweb.maohuahua.model.User;
 import com.belerweb.maohuahua.model.UserImage;
 import com.belerweb.maohuahua.service.ImageService;
 import com.qiniu.api.auth.digest.Mac;
@@ -155,6 +157,28 @@ public class PictureController extends ControllerHelper {
       return ok();
     }
     return illegal();
+  }
+
+
+  /**
+   * 查看单张图片
+   */
+  @RequestMapping("/p/{imageId}.html")
+  public Object image(HttpServletRequest request, @PathVariable String imageId, Model model) {
+    User user = retrieveSiteOwner(request);
+    if (user == null) {
+      return notFound();
+    }
+
+    UserImage image = imageService.getUserImage(imageId);
+    if (image == null || !image.getUploaded()) {
+      return notFound();
+    }
+
+    model.addAttribute("site", userService.getUserSite(user.getId()));
+    model.addAttribute("owner", user);
+    model.addAttribute("img", image);
+    return "/v2/picture";
   }
 
 }

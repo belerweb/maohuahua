@@ -1101,6 +1101,10 @@ ul.social-links>li.pinterest-link:hover {
 	line-height: 20px;
 }
 
+.boxcontainer a {
+	display: block;
+}
+
 .boxcontainer img {
 	position: relative;
 }
