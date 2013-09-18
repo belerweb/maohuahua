@@ -1,1 +1,1 @@
-感谢您在猫画画网站（www.maohuahua.com）注册，您的登录帐号是 ${account} ，登录密码是 ${password} （区分大小写）。
+感谢您在猫画画网站（www.maohuahua.com）注册，您的登录帐号是 ${account} ，登录密码是 ${password} （全数字）。

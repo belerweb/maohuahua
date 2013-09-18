@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
       user.setAvatar(null);
       user.setSubDomain(account);
     }
-    String password = RandomStringUtils.randomAlphanumeric(6);
+    String password = RandomStringUtils.randomNumeric(6);
     user.setPassword(new ShaPasswordEncoder(256).encodePassword(password, null));
     user.setNeedChangePwd(true);
     user = mongoDao.createObject("User", user);
