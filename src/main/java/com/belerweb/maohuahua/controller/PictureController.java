@@ -43,7 +43,8 @@ public class PictureController extends ControllerHelper {
    * 上传图片
    */
   @RequestMapping(method = RequestMethod.GET, value = "/picture/upload")
-  public Object upload() {
+  public Object upload(Model model) {
+    model.addAttribute("qiniuBk", getQiniuBucket());
     return "/v1/picture/upload";
   }
 
@@ -66,7 +67,7 @@ public class PictureController extends ControllerHelper {
     String imageId = UUID.randomUUID().toString();
     String extension = name.substring(name.lastIndexOf(".")).toLowerCase();
     String key = "u/" + userId + "/p/" + date + "/" + imageId + extension;
-    PutPolicy putPolicy = new PutPolicy("maohuahua:" + key);
+    PutPolicy putPolicy = new PutPolicy(getQiniuBucket() + ":" + key);
     putPolicy.endUser = userId;
     putPolicy.callbackUrl = "http://maohuahua.com/picture/upload";
     putPolicy.callbackBody =
@@ -134,6 +135,7 @@ public class PictureController extends ControllerHelper {
   @RequestMapping("/picture")
   public Object picture(Model model) {
     model.addAttribute("imgs", imageService.getUserImages(getUser().getId()));
+    model.addAttribute("qiniuBk", getQiniuBucket());
     return "/v1/picture/my";
   }
 
@@ -175,6 +177,7 @@ public class PictureController extends ControllerHelper {
       return notFound();
     }
 
+    model.addAttribute("qiniuBk", getQiniuBucket());
     model.addAttribute("site", userService.getUserSite(user.getId()));
     model.addAttribute("owner", user);
     model.addAttribute("img", image);

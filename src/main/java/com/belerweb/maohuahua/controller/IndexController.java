@@ -37,6 +37,7 @@ public class IndexController extends ControllerHelper {
     User user = retrieveSiteOwner(request);
     if (user != null) {
       Site site = userService.getUserSite(user.getId());
+      model.addAttribute("qiniuBk", getQiniuBucket());
       model.addAttribute("site", site);
       model.addAttribute("owner", user);
       model.addAttribute("imgs", imageService.getUserImages(user.getId()));

@@ -89,6 +89,7 @@
 						bootbox.alert('<div class="alert alert-error">' + data + '</div>');
 						throw data;
 					});
+					console.log(param);
 					up.settings.multipart_params = param;
 				}
 			},
@@ -164,7 +165,7 @@
 				title.attr('data-name', 'title');
 				title.attr('data-type', 'text');
 				thumbnail.append(title);
-				thumbnail.append('<img src="http://maohuahua.u.qiniudn.com/'+img.qiniuKey+'">');
+				thumbnail.append('<img src="http://${qiniuBk}.u.qiniudn.com/'+img.qiniuKey+'">');
 				var description = $('<p></p>');
 				description.attr('data-pk', img.id);
 				description.attr('data-name', 'description');

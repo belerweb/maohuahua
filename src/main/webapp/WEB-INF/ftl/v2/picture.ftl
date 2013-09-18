@@ -3,7 +3,7 @@
 <div class="container-fluid">
 	<div class="row-fluid spacetop">
 		<div class="span6">
-			<img src="http://maohuahua.u.qiniudn.com/${img.qiniuKey}" alt="${img.title!}">
+			<img src="http://${qiniuBk}.u.qiniudn.com/${img.qiniuKey}" alt="${img.title!}">
 		</div>
 		<div class="span6">
 			<h4>${img.title!}</h4>

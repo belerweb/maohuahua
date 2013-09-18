@@ -64,6 +64,10 @@ public abstract class ControllerHelper extends ViewHelper {
     }
   }
 
+  protected String getQiniuBucket() {
+    return System.getProperty("qiniu.bk", System.getenv("qiniu.bk"));
+  }
+
   protected User getUser() {
     try {
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

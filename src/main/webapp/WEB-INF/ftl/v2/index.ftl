@@ -4,7 +4,7 @@
 	<#list imgs as img>
 		<div class="boxportfolio4">
 			<div class="boxcontainer">
-				<a href="${ContextPath}/p/${img.id}.html" target="_blank"><img src="http://maohuahua.u.qiniudn.com/${img.qiniuKey}" alt="${img.title!}"></a>
+				<a href="${ContextPath}/p/${img.id}.html" target="_blank"><img src="http://${qiniuBk}.u.qiniudn.com/${img.qiniuKey}" alt="${img.title!}"></a>
 				<h1><a href="javascript:void(0);">${img.title!}</a></h1>
 				<p>
 				</p>
