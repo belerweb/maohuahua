@@ -67,9 +67,10 @@
 	var files = [];
 	var uploaderInit = function() {
 		$('#picture-uploader').pluploadQueue({
-			runtimes:'html5,html4',
+			runtimes:'html5,flash,html4',
+			flash_swf_url : '${ContextPath}/assets/v1/img/plupload.flash.swf',
 			multi_selection:true,
-			filters:[{title : "图片", extensions : "jpg,gif,png"}],
+			filters:[{title : '图片', extensions : 'jpg,gif,png'}],
 			url:'http://up.qiniu.com/',
 			preinit:{
 				Init: function(up, info) {
@@ -89,7 +90,6 @@
 						bootbox.alert('<div class="alert alert-error">' + data + '</div>');
 						throw data;
 					});
-					console.log(param);
 					up.settings.multipart_params = param;
 				}
 			},

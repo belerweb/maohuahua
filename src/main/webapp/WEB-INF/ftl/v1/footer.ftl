@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/fuelux.wizard.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/jquery.maskedinput.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/plupload.js"></script>
+		<script type="text/javascript" src="${ContextPath}/assets/v1/js/plupload.flash.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/plupload.html4.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/plupload.html5.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/jquery.plupload.queue.js"></script>

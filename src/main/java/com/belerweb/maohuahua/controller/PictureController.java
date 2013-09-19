@@ -69,7 +69,7 @@ public class PictureController extends ControllerHelper {
     String key = "u/" + userId + "/p/" + date + "/" + imageId + extension;
     PutPolicy putPolicy = new PutPolicy(getQiniuBucket() + ":" + key);
     putPolicy.endUser = userId;
-    putPolicy.callbackUrl = "http://" + System.getProperty("qiniu.callbak") + "/picture/upload";
+    putPolicy.callbackUrl = "http://" + System.getProperty("qiniu.callback") + "/picture/upload";
     putPolicy.callbackBody =
         "token=$(x:token)&uid=$(x:uid)&imageId=$(x:id)" + "&etag=$(etag)&fname=$(fname)"
             + "&fsize=$(fsize)&mimeType=$(mimeType)" + "&imageInfo=$(imageInfo)&exif=$(exif)"
