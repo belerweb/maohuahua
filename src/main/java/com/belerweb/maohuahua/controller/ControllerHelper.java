@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 
+import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.User;
 import com.belerweb.maohuahua.service.UserService;
 import com.belerweb.maohuahua.view.ViewHelper;
@@ -30,6 +31,10 @@ public abstract class ControllerHelper extends ViewHelper {
     }
 
     return userService.getUser("subDomain", subdomain);
+  }
+
+  protected Site retrieveSite(HttpServletRequest request) {
+    return userService.getUserSiteByDomain(request.getServerName());
   }
 
   protected ResponseEntity<Object> ok() {

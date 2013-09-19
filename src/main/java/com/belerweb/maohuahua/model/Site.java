@@ -14,6 +14,7 @@ public class Site {
   private String description;// 网站的描述
   private List<String> keywords = new ArrayList<>();// 关键词
   private String template;// 模板
+  private List<String> domains = new ArrayList<>();// 域名列表
 
   public String getId() {
     return id;
@@ -61,6 +62,14 @@ public class Site {
 
   public void setTemplate(String template) {
     this.template = template;
+  }
+
+  public List<String> getDomains() {
+    return domains;
+  }
+
+  public void setDomains(List<String> domains) {
+    this.domains = domains;
   }
 
 }

@@ -29,6 +29,10 @@ public class UserService implements UserDetailsService {
     return mongoDao.createQuery("User").eq(property, value).findObject(User.class);
   }
 
+  public User getUser(String id) {
+    return mongoDao.findById("User", User.class, id);
+  }
+
   public User signup(String with, String account) {
     User user = new User();
     user.setId(UUID.randomUUID().toString());
@@ -63,6 +67,10 @@ public class UserService implements UserDetailsService {
 
   public Site getUserSite(String userId) {
     return mongoDao.findById("Site", Site.class, userId);
+  }
+
+  public Site getUserSiteByDomain(String domain) {
+    return mongoDao.createQuery("Site").in("domains", domain).findObject(Site.class);
   }
 
   public void updateUserSite(String userId, String property, Object value) {

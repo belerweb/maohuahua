@@ -19,6 +19,7 @@ import com.belerweb.maohuahua.service.EmailService;
 import com.belerweb.maohuahua.service.ImageService;
 import com.belerweb.maohuahua.service.SmsService;
 import com.belerweb.maohuahua.service.TemplateService;
+import com.belerweb.maohuahua.service.UserService;
 
 @Controller
 public class IndexController extends ControllerHelper {
@@ -31,12 +32,14 @@ public class IndexController extends ControllerHelper {
   private SmsService smsService;
   @Autowired
   private ImageService imageService;
+  @Autowired
+  private UserService userService;
 
   @RequestMapping({"/", "/index.html"})
   public Object index(HttpServletRequest request, Model model) {
-    User user = retrieveSiteOwner(request);
-    if (user != null) {
-      Site site = userService.getUserSite(user.getId());
+    Site site = retrieveSite(request);
+    if (site != null) {
+      User user = userService.getUser(site.getId());
       model.addAttribute("qiniuBk", getQiniuBucket());
       model.addAttribute("site", site);
       model.addAttribute("owner", user);

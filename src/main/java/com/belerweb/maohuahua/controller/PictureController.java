@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.belerweb.maohuahua.model.User;
+import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.UserImage;
 import com.belerweb.maohuahua.service.ImageService;
 import com.qiniu.api.auth.digest.Mac;
@@ -167,8 +167,8 @@ public class PictureController extends ControllerHelper {
    */
   @RequestMapping("/p/{imageId}.html")
   public Object image(HttpServletRequest request, @PathVariable String imageId, Model model) {
-    User user = retrieveSiteOwner(request);
-    if (user == null) {
+    Site site = retrieveSite(request);
+    if (site == null) {
       return notFound();
     }
 
@@ -178,8 +178,8 @@ public class PictureController extends ControllerHelper {
     }
 
     model.addAttribute("qiniuBk", getQiniuBucket());
-    model.addAttribute("site", userService.getUserSite(user.getId()));
-    model.addAttribute("owner", user);
+    model.addAttribute("site", site);
+    model.addAttribute("owner", userService.getUser(site.getId()));
     model.addAttribute("img", image);
     return "/v2/picture";
   }
