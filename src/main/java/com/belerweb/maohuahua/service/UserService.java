@@ -40,13 +40,11 @@ public class UserService implements UserDetailsService {
       user.setEmail(account);
       user.setNickname(account.substring(0, account.indexOf("@")));
       user.setAvatar(new Md5PasswordEncoder().encodePassword(account, null));
-      user.setSubDomain(account.replace("@", "."));
     }
     if ("mobile".equals(with)) {
       user.setMobile(account);
       user.setNickname(account);
       user.setAvatar(null);
-      user.setSubDomain(account);
     }
     String password = RandomStringUtils.randomNumeric(6);
     user.setPassword(new ShaPasswordEncoder(256).encodePassword(password, null));
@@ -61,6 +59,7 @@ public class UserService implements UserDetailsService {
     site.setTitle(account + "的网站");
     site.setDescription("猫画画，用心纪录你画画的每一天！");
     site.setTemplate("v2");
+    site.getDomains().add(account.replaceAll("[@\\.]", "-"));
     mongoDao.createObject("Site", site);
     return user;
   }
