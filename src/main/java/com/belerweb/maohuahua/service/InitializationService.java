@@ -4,6 +4,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.belerweb.maohuahua.DataUpgrade;
 import com.belerweb.maohuahua.dao.MongoDao;
 import com.belerweb.maohuahua.model.InitializationConfig;
 
@@ -17,6 +18,8 @@ public class InitializationService implements InitializingBean {
 
   @Autowired
   private MongoDao mongoDao;
+  @Autowired
+  private DataUpgrade dataUpgrade;
 
   @Override
   public void afterPropertiesSet() throws Exception {
@@ -26,6 +29,8 @@ public class InitializationService implements InitializingBean {
     config.setUsername(System.getProperty(CONFIG_DB_USERNAME, System.getenv(CONFIG_DB_USERNAME)));
     config.setPassword(System.getProperty(CONFIG_DB_PASSWORD, System.getenv(CONFIG_DB_PASSWORD)));
     mongoDao.init(config);
+
+    dataUpgrade.upgrade();
   }
 
 }

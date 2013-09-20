@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
     site.setTitle(account + "的网站");
     site.setDescription("猫画画，用心纪录你画画的每一天！");
     site.setTemplate("v2");
-    site.getDomains().add(account.replaceAll("[@\\.]", "-"));
+    site.getDomains().add(account.replaceAll("[@\\.]", "-") + ".maohuahua.com");
     mongoDao.createObject("Site", site);
     return user;
   }
