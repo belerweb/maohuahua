@@ -12,8 +12,8 @@
 		我的域名是什么？<br><br>
 		<div class="alert alert-success">
 			<strong><i class="icon-reply"></i></strong>
-			猫画画当前为你分配的免费域名是 ${user.subDomain}.maohuahua.com 。<br>
-			你可以通过 <a href="http://${user.subDomain}.maohuahua.com" target="_blank">http://${user.subDomain}.maohuahua.com</a> 访问你的网站。你可以更改 .maohuahua.com 之前的部分。
+			猫画画当前为你分配的免费域名是 ${site.domains[0]} 。<br>
+			你可以通过 <a href="http://${site.domains[0]}" target="_blank">http://${site.domains[0]}</a> 访问你的网站。你可以更改 .maohuahua.com 之前的部分。
 		</div>
 	</div>
 	<div class="alert alert-info">

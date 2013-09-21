@@ -18,7 +18,9 @@ public class SiteController extends ControllerHelper {
 
   @RequestMapping("/site/domain")
   public Object domain(Model model) {
-    model.addAttribute("user", getUser());
+    User user = getUser();
+    model.addAttribute("user", user);
+    model.addAttribute("site", userService.getUserSite(user.getId()));
     return "/v1/site/domain";
   }
 

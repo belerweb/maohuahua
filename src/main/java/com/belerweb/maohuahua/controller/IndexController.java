@@ -133,7 +133,8 @@ public class IndexController extends ControllerHelper {
    * 登录后跳转
    */
   @RequestMapping("/home")
-  public Object home() {
+  public Object home(Model model) {
+    model.addAttribute("site", userService.getUserSite(getUser().getId()));
     return "/v1/home";
   }
 

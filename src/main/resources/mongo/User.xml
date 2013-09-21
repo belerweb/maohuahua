@@ -10,7 +10,7 @@
 		<property name="needChangePwd" />
 		<property name="mobileValid" />
 		<property name="emailValid" />
-		<property name="subDomain" />
+		<property name="subDomain" /><!-- TODO DELETE -->
 		<property name="fullname" />
 		<property name="nickname" />
 		<property name="avatar" />

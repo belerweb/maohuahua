@@ -23,16 +23,6 @@ public abstract class ControllerHelper extends ViewHelper {
   @Autowired
   protected UserService userService;
 
-  protected User retrieveSiteOwner(HttpServletRequest request) {
-    String host = request.getServerName();
-    String subdomain = "";
-    if (host.length() > 14) {
-      subdomain = host.substring(0, host.length() - 14);
-    }
-
-    return userService.getUser("subDomain", subdomain);
-  }
-
   protected Site retrieveSite(HttpServletRequest request) {
     return userService.getUserSiteByDomain(request.getServerName());
   }

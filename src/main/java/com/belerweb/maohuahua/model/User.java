@@ -20,7 +20,7 @@ public class User implements Serializable {
   private Boolean needChangePwd = false;// 需要修改密码
   private Boolean mobileValid = false;// 手机号已验证
   private Boolean emailValid = false;// 电子邮件已验证
-  private String subDomain;// 子域名
+  private String subDomain;// TODO DELETE 子域名
   private String fullname;// 姓名
   private String nickname;// 昵称
   private String avatar;// 头像
