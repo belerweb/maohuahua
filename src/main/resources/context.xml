@@ -18,6 +18,13 @@
 		<property name="time" value="${timestamp}" />
 	</bean>
 
+	<bean id="version" class="com.belerweb.maohuahua.service.CentralConfig">
+		<property name="app" value="${central.app}" />
+		<property name="key" value="${central.key}" />
+		<property name="secret" value="${central.secret}" />
+		<property name="profile" value="${central.profile}" />
+	</bean>
+
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 	<bean id="securityContextHolder" class="org.springframework.security.core.context.SecurityContextHolder" />
