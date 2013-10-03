@@ -18,7 +18,7 @@
 		<property name="time" value="${timestamp}" />
 	</bean>
 
-	<bean id="version" class="com.belerweb.maohuahua.service.CentralConfig">
+	<bean id="centralConfig" class="com.belerweb.maohuahua.service.CentralConfig">
 		<property name="app" value="${central.app}" />
 		<property name="key" value="${central.key}" />
 		<property name="secret" value="${central.secret}" />
