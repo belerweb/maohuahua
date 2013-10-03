@@ -8,13 +8,15 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import org.xml.sax.SAXException;
 
-import com.belerweb.maohuahua.model.InitializationConfig;
+import com.belerweb.maohuahua.service.CentralConfig;
 import com.googlecode.mjorm.MapReduce;
 import com.googlecode.mjorm.MapReduceResult;
 import com.googlecode.mjorm.MongoDaoImpl;
@@ -32,26 +34,26 @@ import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
 
 @Repository
-public class MongoDao implements com.googlecode.mjorm.MongoDao {
+public class MongoDao implements com.googlecode.mjorm.MongoDao, InitializingBean {
+
+  @Autowired
+  private CentralConfig centralConfig;
 
   private Mongo mongo;
   private DB db;
   private XmlDescriptorObjectMapper mapper;
   private MongoDaoImpl daoImpl;
 
-  public void init(InitializationConfig config) throws Exception {
-    if (config.getPort() == null) {
-      mongo = new Mongo(config.getHost());
-    } else {
-      mongo = new Mongo(config.getHost(), config.getPort());
-    }
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    mongo = new Mongo(centralConfig.get(CentralConfig.DB_HOST));
 
-    db = mongo.getDB(config.getDbName());
+    db = mongo.getDB(centralConfig.get(CentralConfig.DB_NAME));
     db.isAuthenticated();
 
     // authenticate if needed
-    String username = config.getUsername();
-    String password = config.getPassword();
+    String username = centralConfig.get(CentralConfig.DB_USERNAME);
+    String password = centralConfig.get(CentralConfig.DB_PASSWORD);
     if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
       if (!db.authenticate(username, password.toCharArray())) {
         throw new Exception("Database authenticate failed!");

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.UserImage;
+import com.belerweb.maohuahua.service.CentralConfig;
 import com.belerweb.maohuahua.service.ImageService;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.rs.PutPolicy;
@@ -33,8 +34,6 @@ public class PictureController extends ControllerHelper {
   static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(new String[] {"jpg", "png", "gif"});
   static final List<String> ALLOWED_CONTENT_TYPE = Arrays.asList(new String[] {"image/jpeg",
       "image/png", "image/gif"});
-  static final String QINIU_AK = "qiniu.ak";
-  static final String QINIU_SK = "qiniu.sk";
 
   @Autowired
   private ImageService imageService;
@@ -60,8 +59,8 @@ public class PictureController extends ControllerHelper {
       e.printStackTrace();
       return error(e.getMessage());
     }
-    String accessKey = System.getProperty(QINIU_AK, System.getenv(QINIU_AK));
-    String secretKey = System.getProperty(QINIU_SK, System.getenv(QINIU_SK));
+    String accessKey = centralConfig.get(CentralConfig.QINIU_AK);
+    String secretKey = centralConfig.get(CentralConfig.QINIU_SK);
     Mac mac = new Mac(accessKey, secretKey);
     String userId = getUser().getId();
     String imageId = UUID.randomUUID().toString();
@@ -69,7 +68,8 @@ public class PictureController extends ControllerHelper {
     String key = "u/" + userId + "/p/" + date + "/" + imageId + extension;
     PutPolicy putPolicy = new PutPolicy(getQiniuBucket() + ":" + key);
     putPolicy.endUser = userId;
-    putPolicy.callbackUrl = "http://" + System.getProperty("qiniu.callback") + "/picture/upload";
+    putPolicy.callbackUrl =
+        "http://" + centralConfig.get(CentralConfig.QINIU_CALLBACK) + "/picture/upload";
     putPolicy.callbackBody =
         "token=$(x:token)&uid=$(x:uid)&imageId=$(x:id)" + "&etag=$(etag)&fname=$(fname)"
             + "&fsize=$(fsize)&mimeType=$(mimeType)" + "&imageInfo=$(imageInfo)&exif=$(exif)"

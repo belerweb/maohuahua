@@ -12,6 +12,24 @@ import org.springframework.beans.factory.InitializingBean;
 
 public class CentralConfig implements InitializingBean {
 
+  public static final String DB_HOST = "maohuahua.db.host";
+  public static final String DB_NAME = "maohuahua.db.name";
+  public static final String DB_USERNAME = "maohuahua.db.username";
+  public static final String DB_PASSWORD = "maohuahua.db.password";
+  public static final String NNUO_USERNAME = "9nuo.username";
+  public static final String NNUO_PASSWORD = "9nuo.password";
+  public static final String EMAIL_HOST = "email.host";
+  public static final String EMAIL_POST = "email.port";
+  public static final String EMAIL_SSL = "email.ssl";
+  public static final String EMAIL_USERNAME = "email.username";
+  public static final String EMAIL_PASSWORD = "email.password";
+  public static final String EMAIL_FROM = "email.from";
+  public static final String EMAIL_FROM_NAME = "email.from.name";
+  public static final String QINIU_BK = "qiniu.bk";
+  public static final String QINIU_AK = "qiniu.ak";
+  public static final String QINIU_SK = "qiniu.sk";
+  public static final String QINIU_CALLBACK = "qiniu.callback";
+
   private Properties properties;
 
   private String app;

@@ -14,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.User;
+import com.belerweb.maohuahua.service.CentralConfig;
 import com.belerweb.maohuahua.service.UserService;
 import com.belerweb.maohuahua.view.ViewHelper;
 
@@ -22,6 +23,8 @@ public abstract class ControllerHelper extends ViewHelper {
 
   @Autowired
   protected UserService userService;
+  @Autowired
+  protected CentralConfig centralConfig;
 
   protected Site retrieveSite(HttpServletRequest request) {
     return userService.getUserSiteByDomain(request.getServerName());
@@ -60,7 +63,7 @@ public abstract class ControllerHelper extends ViewHelper {
   }
 
   protected String getQiniuBucket() {
-    return System.getProperty("qiniu.bk", System.getenv("qiniu.bk"));
+    return centralConfig.get(CentralConfig.QINIU_BK);
   }
 
   protected User getUser() {
