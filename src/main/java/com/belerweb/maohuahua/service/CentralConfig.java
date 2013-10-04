@@ -1,12 +1,21 @@
 package com.belerweb.maohuahua.service;
 
-import java.util.Properties;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -30,7 +39,7 @@ public class CentralConfig implements InitializingBean {
   public static final String QINIU_SK = "qiniu.sk";
   public static final String QINIU_CALLBACK = "qiniu.callback";
 
-  private Properties properties;
+  private Map<String, String> properties;
 
   private String app;
   private String key;
@@ -70,16 +79,22 @@ public class CentralConfig implements InitializingBean {
   }
 
   public String get(String config) {
-    return properties.getProperty(config);
+    return properties.get(config);
   }
 
-  public String get(String config, String defaultValue) {
-    return properties.getProperty(config, defaultValue);
-  }
-
+  @SuppressWarnings("unchecked")
   @Override
   public void afterPropertiesSet() throws Exception {
-    HttpClient client = new DefaultHttpClient();
+    SSLSocketFactory sf = new SSLSocketFactory(new TrustStrategy() {
+      @Override
+      public boolean isTrusted(X509Certificate[] chain, String authType)
+          throws CertificateException {
+        return true;
+      }
+    }, new AllowAllHostnameVerifier());
+    SchemeRegistry registry = new SchemeRegistry();
+    registry.register(new Scheme("https", 443, sf));
+    HttpClient client = new DefaultHttpClient(new PoolingClientConnectionManager(registry));
     HttpPost post = new HttpPost("https://central.net.in");
     post.setHeader("App", app);
     post.setHeader("App-Key", key);
@@ -87,10 +102,9 @@ public class CentralConfig implements InitializingBean {
     post.setHeader("App-Profile", profile);
     HttpResponse response = client.execute(post);
     if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-      throw new RuntimeException("获取配置信息失败。");
+      throw new RuntimeException(IOUtils.toString(response.getEntity().getContent()));
     }
 
-    properties = new ObjectMapper().readValue(response.getEntity().getContent(), Properties.class);
+    properties = new ObjectMapper().readValue(response.getEntity().getContent(), Map.class);
   }
-
 }
