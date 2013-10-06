@@ -3,6 +3,7 @@ package com.belerweb.maohuahua;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +13,14 @@ import com.belerweb.maohuahua.model.User;
 import com.belerweb.maohuahua.model.Version;
 
 @Component
-public class DataUpgrade {
+public class DataUpgrade implements InitializingBean {
 
   @Autowired
   private MongoDao mongoDao;
   @Autowired
   private Version version;
 
-  public void upgrade() {
+  private void upgrade() {
     nullToV1();
   }
 
@@ -40,5 +41,10 @@ public class DataUpgrade {
       }
     }
     mongoDao.createObject("Version", this.version);
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    upgrade();
   }
 }
