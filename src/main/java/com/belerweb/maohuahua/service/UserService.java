@@ -1,5 +1,6 @@
 package com.belerweb.maohuahua.service;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -49,6 +50,8 @@ public class UserService implements UserDetailsService {
     String password = RandomStringUtils.randomNumeric(6);
     user.setPassword(new ShaPasswordEncoder(256).encodePassword(password, null));
     user.setNeedChangePwd(true);
+    user.setCreated(new Date());
+    user.setModified(user.getCreated());
     user = mongoDao.createObject("User", user);
     user.setPassword(password);
 
