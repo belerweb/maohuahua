@@ -12,7 +12,7 @@
 	<context:component-scan base-package="com.belerweb.maohuahua" />
 
 	<bean id="version" class="com.belerweb.maohuahua.model.Version">
-		<property name="id" value="1" />
+		<property name="id" value="2" />
 		<property name="name" value="${project.name}" />
 		<property name="version" value="${project.version}" />
 		<property name="time" value="${timestamp}" />
