@@ -1,6 +1,7 @@
 package com.belerweb.maohuahua;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -21,12 +22,15 @@ public class DataUpgrade implements InitializingBean {
   private Version version;
 
   private void upgrade() {
-    nullToV1();
+    Version version = mongoDao.createQuery("Version").findObject(Version.class);
+    version = nullToV1(version);
+    version = v1ToV2(version);
+    mongoDao.createObject("Version", this.version);
   }
 
-  private void nullToV1() {
-    Version version = mongoDao.createQuery("Version").findObject(Version.class);
+  private Version nullToV1(Version version) {
     if (version == null) {
+      version = new Version();
       List<User> users = mongoDao.createQuery("User").findObjects(User.class).readAll();
       for (User user : users) {
         Site site = mongoDao.findById("Site", Site.class, user.getId());
@@ -40,7 +44,24 @@ public class DataUpgrade implements InitializingBean {
         mongoDao.createQuery("User").modify().unset("subDomain").update();
       }
     }
-    mongoDao.createObject("Version", this.version);
+
+    version.setId(1);
+    return version;
+  }
+
+  private Version v1ToV2(Version version) {
+    if (version.getId() == 1) {
+      List<User> users = mongoDao.createQuery("User").findObjects(User.class).readAll();
+      for (User user : users) {
+        if (user.getCreated() == null || user.getModified() == null) {
+          user.setCreated(new Date());
+          user.setModified(user.getCreated());
+          mongoDao.updateObject("User", user.getId(), user);
+        }
+      }
+    }
+    version.setId(1);
+    return version;
   }
 
   @Override
