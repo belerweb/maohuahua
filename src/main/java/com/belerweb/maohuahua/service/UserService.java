@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.belerweb.maohuahua.dao.MongoDao;
+import com.belerweb.maohuahua.model.QueryResult;
 import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.User;
+import com.googlecode.mjorm.query.DaoQuery;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -32,6 +34,18 @@ public class UserService implements UserDetailsService {
 
   public User getUser(String id) {
     return mongoDao.findById("User", User.class, id);
+  }
+
+  public QueryResult<User> getUsers(int page, int pageSize) {
+    QueryResult<User> result = new QueryResult<>(page, pageSize);
+    DaoQuery query = mongoDao.createQuery("User").addSort("created", -1);
+    result.setTotal(query.countObjects());
+
+    query.setFirstDocument(result.getStart());
+    query.setMaxDocuments(result.getPageSize());
+    result.setItems(query.findObjects(User.class).readAll());
+
+    return result;
   }
 
   public User signup(String with, String account) {

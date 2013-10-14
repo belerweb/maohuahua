@@ -6,6 +6,8 @@
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap-editable.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap-datepicker.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/bootstrap-datepicker.zh-CN.js"></script>
+		<script type="text/javascript" src="${ContextPath}/assets/v1/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="${ContextPath}/assets/v1/js/jquery.dataTables.bootstrap.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/fuelux.wizard.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/jquery.maskedinput.js"></script>
 		<script type="text/javascript" src="${ContextPath}/assets/v1/js/plupload.js"></script>

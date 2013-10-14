@@ -25,6 +25,7 @@ public class DataUpgrade implements InitializingBean {
     Version version = mongoDao.createQuery("Version").findObject(Version.class);
     version = nullToV1(version);
     version = v1ToV2(version);
+    mongoDao.createQuery("Version").modify().delete();
     mongoDao.createObject("Version", this.version);
   }
 
