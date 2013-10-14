@@ -5,7 +5,7 @@
 	'name':'用户管理',
 	'url':'/admin/user/list'
 }] />
-<#include "sidebar.ftl">
+<#include "sidebar_admin.ftl">
 <div id="main-content" class="clearfix">
 	<div id="page-content" class="clearfix">
 		<div class="alert alert-success text-center" style="padding:100px 10px;">
