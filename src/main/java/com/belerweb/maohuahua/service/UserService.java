@@ -17,6 +17,7 @@ import com.belerweb.maohuahua.dao.MongoDao;
 import com.belerweb.maohuahua.model.QueryResult;
 import com.belerweb.maohuahua.model.Site;
 import com.belerweb.maohuahua.model.User;
+import com.googlecode.mjorm.query.DaoModifier;
 import com.googlecode.mjorm.query.DaoQuery;
 
 @Service
@@ -46,6 +47,16 @@ public class UserService implements UserDetailsService {
     result.setItems(query.findObjects(User.class).readAll());
 
     return result;
+  }
+
+  public void toggleRole(String id, String role, boolean toggle) {
+    DaoModifier modify = mongoDao.createQuery("User").eq("_id", id).modify();
+    if (toggle) {
+      modify.push("roles", role);
+    } else {
+      modify.pull("roles", role);
+    }
+    modify.update();
   }
 
   public User signup(String with, String account) {

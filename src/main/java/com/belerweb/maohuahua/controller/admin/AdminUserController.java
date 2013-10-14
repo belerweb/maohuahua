@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.belerweb.maohuahua.controller.ControllerHelper;
@@ -20,6 +21,17 @@ public class AdminUserController extends ControllerHelper {
     int pageSize = 10;
     model.addAttribute("result", userService.getUsers(page, pageSize));
     return "v1/admin/user/list";
+  }
+
+  @RequestMapping(method = RequestMethod.POST, value = "/admin/user/update")
+  public Object update(@RequestParam String pk, @RequestParam String name,
+      @RequestParam String value) {
+    if (name.equals("admin")) {
+      userService.toggleRole(pk, "ROLE_ADMIN", Boolean.valueOf(value));
+      return ok();
+    }
+
+    return illegal();
   }
 
 }

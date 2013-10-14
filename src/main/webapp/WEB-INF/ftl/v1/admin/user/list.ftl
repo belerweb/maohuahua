@@ -67,4 +67,16 @@ $('#main-list-table').dataTable({
 		App.go('#main-content', '${ContextPath}/admin/user/list?' + $.param(q));
 	}
 });
+$('#page-content input[data-action=toggle-property]').click(function(){
+	var input = this;
+	$.post('${ContextPath}/admin/user/update', {
+		pk: $(this).data('id'),
+		name: $(this).attr('name'),
+		value: this.checked
+	}).done(function(data){
+	}).fail(function() {
+		bootbox.alert('<div class="alert alert-error">操作失败！</div>');
+		input.checked = !input.checked;
+	});
+});
 </script>
